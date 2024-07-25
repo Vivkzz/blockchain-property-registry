@@ -25,14 +25,15 @@
 </script>
 
 <h1>Register</h1>
-
-<!-- here preventDefault will avoid default reload and add register function -->
 <form on:submit|preventDefault={register}>
-    <label>Email</label>
-    <input type="email" bind:value={email} />
-    <label>Password</label>
-    <input type="password" bind:value={password} />
-    <label>Confirm Password</label>
-    <input type="password" bind:value={confirmPassword} />
+    <label for="email">Email</label>
+    <input id="email" type="email" bind:value={email} />
+
+    <label for="password">Password</label>
+    <input id="password" type="password" bind:value={password} />
+
+    <label for="confirm-password">Confirm Password</label>
+    <input id="confirm-password" type="password" bind:value={confirmPassword} />
+
     <button type="submit">Register</button>
 </form>

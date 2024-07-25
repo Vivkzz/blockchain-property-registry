@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from "svelte";
     import api from "../services/api";
     let email = "";
     let password = "";
@@ -16,11 +17,10 @@
 </script>
 
 <h1>Login</h1>
-<!-- here preventDefault will avoid default reload and add login() function -->
 <form on:submit|preventDefault={login}>
-    <label>Email</label>
-    <input type="email" bind:value={email} />
-    <label>Password</label>
-    <input type="password" bind:value={password} />
+    <label for="email">Email</label>
+    <input id="email" type="email" bind:value={email} />
+    <label for="password">Password</label>
+    <input id="password" type="password" bind:value={password} />
     <button type="submit">Login</button>
 </form>

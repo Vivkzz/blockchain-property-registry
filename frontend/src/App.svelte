@@ -1,18 +1,56 @@
 <script>
-	import { Router, Link, Route } from "svelte-routing";
-	import Home from "./pages/Home.svelte";
+	import { onMount } from "svelte";
+	import { user, getUserId, fetchUserProfile } from "./pages/store";
 	import Login from "./pages/Login.svelte";
 	import Register from "./pages/Register.svelte";
-	import Dashboard from "./pages/Dashboard.svelte";
+	import UserProfile from "./pages/UserProfile.svelte";
+	import Map from "./pages/Map.svelte";
+
+	let currentPage = "login";
+	let userProfile = {};
+
+	function navigate(page) {
+		currentPage = page;
+	}
+
+	onMount(() => {
+		const userId = getUserId();
+		if (userId) {
+			fetchUserProfile(userId)
+				.then((profile) => {
+					userProfile = profile;
+					user.set({ ...userProfile, isLoggedIn: true });
+				})
+				.catch((error) => {
+					console.error(error);
+					navigate("login");
+				});
+		} else {
+			navigate("login");
+		}
+	});
 </script>
 
 <main>
-	<Router>
-		<Route path="/" component={Home} />
-		<Route path="login" component={Login} />
-		<Route path="register" component={Register} />
-		<Route path="dashboard" component={Dashboard} />
-	</Router>
+	{#if currentPage === "login"}
+		<Login />
+	{/if}
+	{#if currentPage === "register"}
+		<Register />
+	{/if}
+	{#if currentPage === "profile"}
+		<UserProfile />
+	{/if}
+	{#if currentPage === "map"}
+		<Map />
+	{/if}
+
+	<nav>
+		<button on:click={() => navigate("login")}>Login</button>
+		<button on:click={() => navigate("register")}>Register</button>
+		<button on:click={() => navigate("profile")}>Profile</button>
+		<button on:click={() => navigate("map")}>Map</button>
+	</nav>
 </main>
 
 <style>
@@ -22,14 +60,6 @@
 		max-width: 240px;
 		margin: 0 auto;
 	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
 	@media (min-width: 640px) {
 		main {
 			max-width: none;
